@@ -1,6 +1,7 @@
 ﻿using PruebaNewshore.Models.DTO;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,7 +18,7 @@ namespace PruebaNewshore.Models.BLL.Contracts
         /// Validate if newshore user exists in list
         /// </summary>
         /// <param name="files">Array of files uploaded</param>
-        /// <returns>ActionResultDTO with process result</returns>
-        ActionResultDTO ValidateUsersList(HttpPostedFileBase[] files);
+        /// <returns>ActionResultReturnDTO (T as FileInfo) to download file</returns>
+        ActionResultReturnDTO<FileInfo> ValidateUsersList(HttpPostedFileBase[] files);
     }
 }

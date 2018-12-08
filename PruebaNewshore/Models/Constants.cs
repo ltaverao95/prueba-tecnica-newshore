@@ -20,5 +20,9 @@ namespace PruebaNewshore.Models
         /// Folder name where files are uploaded
         /// </summary>
         public const string ServerUploadFilesFolderName = "UploadedFiles";
+
+        public const string DataListFileName = "CONTENIDO.txt";
+        public const string UsersListFileName = "REGISTRADOS.txt";
+        public const string ResultsFileName = "RESULTADOS.txt";
     }
 }

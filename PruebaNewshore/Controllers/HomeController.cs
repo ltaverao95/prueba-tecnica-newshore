@@ -1,4 +1,5 @@
-﻿using PruebaNewshore.Models.BLL.Contracts;
+﻿using PruebaNewshore.Models;
+using PruebaNewshore.Models.BLL.Contracts;
 using PruebaNewshore.Models.BLL.Implementations;
 using PruebaNewshore.Models.DTO;
 using System;
@@ -25,8 +26,23 @@ namespace PruebaNewshore.Controllers
             if (ModelState.IsValid)
             {
                 IUploadFileBLL uploadFileBLL = new UploadFileBLL();
-                ActionResultDTO actionResultDTO = uploadFileBLL.ValidateUsersList(files);
-                ViewBag.UploadStatus = actionResultDTO.UserMessage;
+                ActionResultReturnDTO<FileInfo> actionResultReturnDTO = uploadFileBLL.ValidateUsersList(files);
+                if (actionResultReturnDTO.HasErrors)
+                {
+                    ViewBag.UploadStatus = actionResultReturnDTO.UserMessage;
+                    return View();
+                }
+
+                ViewBag.UploadStatus = "Procesamiento exitoso";
+
+                byte[] fileData = null;
+
+                using (BinaryReader binaryReader = new BinaryReader(actionResultReturnDTO.ResultData.OpenRead()))
+                {
+                    fileData = binaryReader.ReadBytes((int)actionResultReturnDTO.ResultData.Length);
+                }
+
+                return File(fileData, "text/plain", Constants.ResultsFileName);
             }
 
             return View();
