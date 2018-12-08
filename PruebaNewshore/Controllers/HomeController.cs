@@ -1,4 +1,7 @@
-﻿using System;
+﻿using PruebaNewshore.Models.BLL.Contracts;
+using PruebaNewshore.Models.BLL.Implementations;
+using PruebaNewshore.Models.DTO;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -17,21 +20,13 @@ namespace PruebaNewshore.Controllers
         [HttpPost]
         public ActionResult Index(HttpPostedFileBase[] files)
         {
-            if (ModelState.IsValid)
-            {   
-                foreach (HttpPostedFileBase file in files)
-                {
-                    if (file != null)
-                    {
-                        var InputFileName = Path.GetFileName(file.FileName);
-                        var ServerSavePath = Path.Combine(Server.MapPath("~/UploadedFiles/") + InputFileName);
-                        //Save file to server folder  
-                        file.SaveAs(ServerSavePath);
-                        //assigning file uploaded status to ViewBag for showing message to user.  
-                        ViewBag.UploadStatus = files.Count().ToString() + " archivos cargados con éxito.";
-                    }
+            ViewBag.UploadStatus = "";
 
-                }
+            if (ModelState.IsValid)
+            {
+                IUploadFileBLL uploadFileBLL = new UploadFileBLL();
+                ActionResultDTO actionResultDTO = uploadFileBLL.ValidateUsersList(files);
+                ViewBag.UploadStatus = actionResultDTO.UserMessage;
             }
 
             return View();
